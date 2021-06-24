@@ -1,17 +1,17 @@
-var express = require('express');
-var knexfile = require('./knexfile.js');
-var knex = require('knex');
+const express = require('express');
+const knexfile = require('./knexfile.js');
+const knex = require('knex');
 
-var db = knex(knexfile[process.env.NODE_ENV || 'development']);
+const db = knex(knexfile[process.env.NODE_ENV || 'development']);
 
-var app = express();
+const app = express();
 
-app.get('/', function(req, res, next) {
-  db.raw('select 1 + 1 as num').then(result => {
-    var number = result.rows[0].num;
-    res.send('SQL query successful, result was: ' + number);
-  });
+app.get('/', async function(req, res, next) {
+  const result = await db.raw('select 1 + 1 as num')
+  const number = result.rows[0].num;
+  res.send('SQL query successful, result was: ' + number);
 });
+
 app.listen(process.env.PORT || 3000, function() {
   console.log('Server listening');
 });
